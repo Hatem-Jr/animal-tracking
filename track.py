@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import glob, os, sys, time, datetime
+import GUI
 
 # TODO corners save when offline processing
 ONLINE = True
@@ -88,7 +89,7 @@ def floorCrop(filename):
     while not frame.any():
         ret, frame = cap.read()
 
-    frame = frame[:, w-h : w]
+    #frame = frame[:, w-h : w]
 
     frameGray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     kernelSize = (5,5)
@@ -188,7 +189,7 @@ def trace(filename):
         frame = cv2.subtract(frame, background)
 
         t = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000.
-        frame = frame[:, w-h : w]
+        #frame = frame[:, w-h : w]
         if len(croppingPolygons[name]) == 4:
             cv2.drawContours(frameColor, [np.reshape(croppingPolygons[name], (4,2))], -1, BGR_COLOR['red'], 2, cv2.LINE_AA)
         else:
@@ -280,8 +281,12 @@ file = open(RELATIVE_DESTINATION_PATH + 'distances.csv', 'w')
 file.write('animal,distance [unit of the box side],run time [seconds]\n')
 file.close()
 
-for filename in glob.glob('*.avi'):
-    floorCrop(filename)
-for filename in glob.glob('*.avi'):
-    file = open(RELATIVE_DESTINATION_PATH + 'distances.csv', 'a')
-    trace(filename)
+#for filename in glob.glob('*.mp4'):
+    #floorCrop(filename)
+#for filename in glob.glob('*.mp4'):
+    #file = open(RELATIVE_DESTINATION_PATH + 'distances.csv', 'a')
+    #trace(filename)
+
+floorCrop(GUI.filepath)
+file = open(RELATIVE_DESTINATION_PATH + 'distances.csv', 'a')
+trace(GUI.filepath)
